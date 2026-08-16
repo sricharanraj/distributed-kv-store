@@ -1,0 +1,44 @@
+version: "3.9"
+
+# A 3-node cluster with replication factor 2. Each node knows about the
+# other two via -peers; docker-compose's embedded DNS resolves the service
+# names, so nodes address each other as "node1:8080", "node2:8080", etc.
+services:
+  node1:
+    build: .
+    command:
+      - "-http-addr=0.0.0.0:8080"
+      - "-tcp-addr=0.0.0.0:6380"
+      - "-node-id=node1:8080"
+      - "-peers=node2:8080,node3:8080"
+      - "-replicas=2"
+      - "-data-dir=/data"
+    ports:
+      - "8081:8080"
+      - "6381:6380"
+
+  node2:
+    build: .
+    command:
+      - "-http-addr=0.0.0.0:8080"
+      - "-tcp-addr=0.0.0.0:6380"
+      - "-node-id=node2:8080"
+      - "-peers=node1:8080,node3:8080"
+      - "-replicas=2"
+      - "-data-dir=/data"
+    ports:
+      - "8082:8080"
+      - "6382:6380"
+
+  node3:
+    build: .
+    command:
+      - "-http-addr=0.0.0.0:8080"
+      - "-tcp-addr=0.0.0.0:6380"
+      - "-node-id=node3:8080"
+      - "-peers=node1:8080,node2:8080"
+      - "-replicas=2"
+      - "-data-dir=/data"
+    ports:
+      - "8083:8080"
+      - "6383:6380"
