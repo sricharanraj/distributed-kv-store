@@ -237,3 +237,4 @@ simplifications, kept intentionally simple rather than half-implemented:
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
